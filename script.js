@@ -4,6 +4,8 @@ class CasinoGame {
         this.luck = 0;
         this.creditDebt = 0;
         this.luckCost = 1000;
+        this.range = 'None';
+        this.bonus = 0;
         this.updateUI();
     }
 
@@ -15,7 +17,7 @@ class CasinoGame {
         this.balance -= 100;
         const winChance = Math.random() * (1 + this.luck / 100);
         if (winChance > 0.5) {
-            const winnings = Math.floor(Math.random() * 901) + 100;
+            const winnings = Math.floor(Math.random() * 901) + 100 + this.bonus;
             this.balance += winnings;
             this.showMessage(`You won $${winnings}!`);
         } else {
@@ -62,26 +64,60 @@ class CasinoGame {
 
     buyItem(item) {
         const items = {
-            car: 5000,
-            jewelry: 2000,
-            house: 10000
+            car: { price: 5000, range: 'Small Rich', bonus: 200 },
+            jewelry: { price: 50000, range: 'Big Rich', bonus: 2000 },
+            house: { price: 1000000, range: 'Millionaire', bonus: 25000 }
         };
         if (!items[item]) {
             this.showMessage("Invalid item.");
             return;
         }
-        if (this.balance < items[item]) {
+        if (this.balance < items[item].price) {
             this.showMessage("Not enough balance to buy item.");
             return;
         }
-        this.balance -= items[item];
-        this.showMessage(`You bought a ${item} for $${items[item]}.`);
+        this.balance -= items[item].price;
+        this.range = items[item].range;
+        this.bonus = items[item].bonus;
+        this.showMessage(`You bought a ${item} for $${items[item].price}.`);
         this.updateUI();
+    }
+
+    saveGame() {
+        const gameState = {
+            balance: this.balance,
+            luck: this.luck,
+            creditDebt: this.creditDebt,
+            luckCost: this.luckCost,
+            range: this.range,
+            bonus: this.bonus
+        };
+        localStorage.setItem('casinoGameState', JSON.stringify(gameState));
+        this.showMessage("Game saved.");
+    }
+
+    loadGame() {
+        const gameState = JSON.parse(localStorage.getItem('casinoGameState'));
+        if (gameState) {
+            this.balance = gameState.balance;
+            this.luck = gameState.luck;
+            this.creditDebt = gameState.creditDebt;
+            this.luckCost = gameState.luckCost;
+            this.range = gameState.range;
+            this.bonus = gameState.bonus;
+            this.showMessage("Game loaded.");
+            this.updateUI();
+        } else {
+            this.showMessage("No saved game found.");
+        }
     }
 
     updateUI() {
         document.getElementById("balance").innerText = `Balance: $${this.balance}`;
         document.getElementById("debt").innerText = `Debt: $${this.creditDebt}`;
+        document.getElementById("luck-cost").innerText = `Luck Cost: $${this.luckCost}`;
+        document.getElementById("luck-cost-display").innerText = `$${this.luckCost}`;
+        document.getElementById("range").innerText = `Range: ${this.range}`;
     }
 
     showMessage(message) {
@@ -113,4 +149,12 @@ function repayCredit() {
 
 function buyItem(item) {
     game.buyItem(item);
+}
+
+function saveGame() {
+    game.saveGame();
+}
+
+function loadGame() {
+    game.loadGame();
 }
