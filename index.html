@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; }
+        .result { margin-top: 20px; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Casino Game</h1>
+    <button onclick="spin()">Spin ($100)</button>
+    <button onclick="buyLuck()">Buy 1% Luck ($1000)</button>
+    <div class="result" id="result"></div>
+
+    <script>
+        let balance = 10000; // Starting balance
+        let luck = 0; // Initial luck
+
+        function getRandomWin() {
+            const odds = Math.random() * 100 + luck;
+            if (odds < 50) return 20;
+            if (odds < 75) return 100;
+            if (odds < 90) return 1000;
+            if (odds < 98) return 10000;
+            return 1000000;
+        }
+
+        function spin() {
+            if (balance < 100) {
+                document.getElementById('result').innerText = 'Not enough balance to spin.';
+                return;
+            }
+            balance -= 100;
+            const win = getRandomWin();
+            balance += win;
+            document.getElementById('result').innerText = `You won $${win}! Your balance is now $${balance}.`;
+        }
+
+        function buyLuck() {
+            if (balance < 1000) {
+                document.getElementById('result').innerText = 'Not enough balance to buy luck.';
+                return;
+            }
+            balance -= 1000;
+            luck += 1;
+            document.getElementById('result').innerText = `You bought 1% luck! Your luck is now ${luck}%. Your balance is now $${balance}.`;
+        }
+    </script>
+</body>
+</html>
