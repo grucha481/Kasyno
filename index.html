@@ -11,13 +11,17 @@
         <h1>Casino Game</h1>
         <div id="balance">Balance: $1000</div>
         <div id="debt">Debt: $0</div>
+        <div id="luck-cost">Luck Cost: $1000</div>
+        <div id="range">Range: None</div>
         <button onclick="spin()">Spin ($100)</button>
-        <button onclick="buyLuck()">Buy Luck ($1000)</button>
+        <button onclick="buyLuck()">Buy Luck (<span id="luck-cost-display">$1000</span>)</button>
         <button onclick="takeCredit()">Take Credit</button>
         <button onclick="repayCredit()">Repay Credit</button>
         <button onclick="buyItem('car')">Buy Car ($5000)</button>
-        <button onclick="buyItem('jewelry')">Buy Jewelry ($2000)</button>
-        <button onclick="buyItem('house')">Buy House ($10000)</button>
+        <button onclick="buyItem('jewelry')">Buy Jewelry ($50000)</button>
+        <button onclick="buyItem('house')">Buy House ($1000000)</button>
+        <button onclick="saveGame()">Save Game</button>
+        <button onclick="loadGame()">Load Game</button>
         <div id="message"></div>
     </div>
     <script src="script.js"></script>
